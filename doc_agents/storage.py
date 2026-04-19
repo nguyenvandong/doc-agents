@@ -21,6 +21,17 @@ class ArtifactMetadataRecord:
 
 
 class MinioArtifactBlobStore:
+    _ARTIFACT_EXTENSIONS = {
+        "parsed_document": ".json",
+        "semantic_chunks": ".json",
+        "data_schema_json": ".json",
+        "business_rules_json": ".json",
+        "workflows_json": ".json",
+        "markdown_draft": ".md",
+        "frontmatter": ".yaml",
+        "mermaid_render": ".mmd",
+    }
+
     def __init__(self, client: Minio, bucket_name: str) -> None:
         self.client = client
         self.bucket_name = bucket_name
@@ -59,7 +70,8 @@ class MinioArtifactBlobStore:
 
     @staticmethod
     def object_key_for(*, workflow_id: str, artifact: ArtifactRef) -> str:
-        return f"{workflow_id}/{artifact.artifact_type}/v{artifact.version}/{artifact.artifact_id}.bin"
+        extension = MinioArtifactBlobStore._ARTIFACT_EXTENSIONS.get(artifact.artifact_type, ".bin")
+        return f"{workflow_id}/{artifact.artifact_type}/v{artifact.version}/{artifact.artifact_id}{extension}"
 
     def get_bytes(self, artifact_uri: str) -> bytes:
         parsed = urlparse(artifact_uri)

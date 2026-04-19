@@ -89,7 +89,7 @@ class ArtifactRepositoryTest(unittest.TestCase):
 
         self.assertEqual(
             artifact.uri,
-            "s3://doc-artifacts/wf-7/parsed_document/v1/doc-7-parsed_document-v1.bin",
+            "s3://doc-artifacts/wf-7/parsed_document/v1/doc-7-parsed_document-v1.json",
         )
         self.assertIn("insert into artifact_records", connection.commands[-1][0].lower())
         self.assertEqual(connection.commands[-1][1][1], "doc-7")
@@ -130,7 +130,7 @@ class ArtifactRepositoryTest(unittest.TestCase):
         )
 
         self.assertEqual(artifact.version, 2)
-        self.assertTrue(artifact.uri.endswith("/v2/doc-9-data_schema_json-v2.bin"))
+        self.assertTrue(artifact.uri.endswith("/v2/doc-9-data_schema_json-v2.json"))
 
     def test_load_latest_returns_highest_version_for_artifact_type(self) -> None:
         blob_store = MinioArtifactBlobStore(client=FakeMinioClient(), bucket_name="doc-artifacts")
@@ -139,7 +139,7 @@ class ArtifactRepositoryTest(unittest.TestCase):
             "doc-9-data_schema_json-v3",
             "data_schema_json",
             3,
-            "s3://doc-artifacts/wf-9/data_schema_json/v3/doc-9-data_schema_json-v3.bin",
+            "s3://doc-artifacts/wf-9/data_schema_json/v3/doc-9-data_schema_json-v3.json",
         )
         catalog = PostgresArtifactCatalog(connection_factory=lambda: connection)
         repository = ArtifactRepository(blob_store=blob_store, catalog=catalog)

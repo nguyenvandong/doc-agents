@@ -82,7 +82,7 @@ class MinioArtifactBlobStoreTest(unittest.TestCase):
 
         self.assertEqual(
             object_key,
-            "wf-1/data_schema_json/v2/a1.bin",
+            "wf-1/data_schema_json/v2/a1.json",
         )
         self.assertEqual(client.calls[0], ("bucket_exists", "doc-artifacts"))
         self.assertEqual(client.calls[1], ("make_bucket", "doc-artifacts"))
@@ -100,7 +100,7 @@ class PostgresArtifactCatalogTest(unittest.TestCase):
                 artifact_id="artifact-1",
                 artifact_type="markdown_draft",
                 version=4,
-                uri="s3://doc-artifacts/wf-1/markdown_draft/v4/artifact-1.bin",
+                uri="s3://doc-artifacts/wf-1/markdown_draft/v4/artifact-1.md",
             ),
             content_type="text/markdown",
             size_bytes=128,
